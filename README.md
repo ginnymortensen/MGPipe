@@ -59,8 +59,8 @@ humann_databases --download uniref uniref90_diamond humann_databases
 DB_DIR="humann_databases"  # Modify this path if needed
 ```
 
-### **Optional** Install Bowtie2 Indexes:
-MGPipe will automatically install bowtie2 indexes from ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/grch38_1kgmaj.fa.gz if it does not find them in the default directory. This step takes a significant amount of time to run.<br>
+### *Optional* Install Bowtie2 Indexes:
+MGPipe will automatically install bowtie2 indexes from ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/grch38_1kgmaj.fa.gz if it does not find them in the default directory. This step takes a significant amount of time to run.<br><br>
 If you already have bowtie2 indexes installed, update `DB_DIR` and `INDEX_NAME` in `host_remover.sh` to match your bowtie2 indexes installation path and index name.
 
 ```bash
@@ -152,17 +152,13 @@ When running natively, your output directory will have this structure:
 |--------|---------|-----------|--------------------|
 | `trimmer.sh` | Quality control & adapter trimming | [FASTP](https://github.com/OpenGene/fastp) | [FASTP Manual](https://github.com/OpenGene/fastp#readme) |
 | `host_remover.sh` | Host DNA removal | [bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) | [bowtie2 Manual](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) |
-| `taxonomic_profiler.sh` | Species-level profiling | [Kraken2](https://ccb.jhu.edu/software/kraken2/)<br>[Bracken](https://ccb.jhu.edu/software/bracken/) | [Kraken2 Wiki](https://github.com/DerrickWood/kraken2/wiki)<br>[Bracken Paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1871-4) |
+| `taxonomic_profiler.sh` | Species-level profiling | [Kraken2](https://ccb.jhu.edu/software/kraken2/)<br>[Bracken](https://ccb.jhu.edu/software/bracken/) | [Kraken2 Wiki](https://github.com/DerrickWood/kraken2/wiki)<br>[Bracken Paper](https://peerj.com/articles/cs-104/) |
 | `functional_profiler.sh` | Metabolic pathway analysis | [HUMAnN3](https://github.com/biobakery/humann) | [HUMAnN3 Docs](https://github.com/biobakery/humann#documentation) |
 
 ### Integrated Tools Reference
 #### Quality Control
 - **FASTP**  
-  Official documentation: https://github.com/OpenGene/fastp  
-  Key parameters in MGPipe:
-  ```bash
-  --cut_front --cut_tail --n_base_limit 5 --length_required 75
-  ```
+  Official documentation: https://github.com/OpenGene/fastp
 
 #### Host DNA Removal
 - **bowtie2**  
