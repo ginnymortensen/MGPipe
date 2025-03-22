@@ -1,6 +1,6 @@
 # MGPipe: _MetaGenomics Pipeline_
 
-This shotgun metagenomics pipeline processes raw short read paired-end reads into usable microbiome data, suitable for postprocessing. The pipeline performs quality control of sequences (trimming via FASTP and host removal via bowtie2), taxonomic profiling (via Kraken2 and Bracken), and functional profiling (via HUMAnN3).
+This shotgun metagenomics pipeline processes raw short read paired-end reads into usable microbiome data, suitable for postprocessing. The pipeline performs quality control of sequences, host genome sequence removal, taxonomic profiling, and functional profiling. This pipeline is meant to provide beginners with a seamless tool to achieve basic microbiome analyses.
 
 ## Table of Contents
 - [Installation](#installation)
