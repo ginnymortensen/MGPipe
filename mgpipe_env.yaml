@@ -1,10 +1,11 @@
-name: microbiome_health
+name: mgpipe_env
 channels:
   - biobakery
   - conda-forge
   - bioconda
   - defaults
 dependencies:
+  - yq
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu
   - _r-mutex=1.0.1=anacondar_1
@@ -551,4 +552,4 @@ dependencies:
   - zstd=1.5.6=ha6fb4c9_0
   - pip:
       - humann==3.9
-prefix: /home/gamorten/bin/miniconda3/envs/microbiome_health
+      - kraken-biom
