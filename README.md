@@ -9,44 +9,77 @@ This shotgun metagenomics pipeline processes raw short read paired-end reads int
 
 ## Installation:
 
-To use MGPipe, you need to have conda installed, MGPipe cloned locally, Kraken2/Bracken databases downloaded, and HUMAnN3 installed. 
+To use MGPipe, you need to have conda installed, MGPipe cloned locally, Kraken2/Bracken databases downloaded, and HUMAnN3 installed. <br><br>
 
-### 1) Install conda:
-If you already have conda installed, change the `CONDAPATH` variable in `mgpipe.sh` to point to the path of your conda installation. This will allow you to run MGPipe in non-interactive shells.<br>
-`mkdir ./bin` <br>
-`wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./bin/miniconda.sh` <br>
-When prompted, enter: <br>
-`./bin/miniconda3` as your installation path and say yes to everything when prompted.<br>
-Change the `CONDAPATH` variable in `mgpipe.sh` to point to your conda installation.
+### Prerequisites:
+- Unix-based system (Linux/macOS)
+- Minimum 16GB RAM (32GB recommended)
+- 100GB+ free disk space
 
-### 2) Clone MGPipe locally:
-Ensure you have a folder named `MGPipe` in your working environment with all mgpipe related scripts in it.
-
-### 3) Download Kraken2/Bracken databases:
+### Install conda:
+```bash
+mkdir -p ./bin
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ./bin/miniconda.sh
+bash ./bin/miniconda.sh -b -p ./bin/miniconda3
+```
+**Important:** Update `CONDAPATH` in `mgpipe.sh` to match your installation path, _especially_ if you have conda installed already:
+```bash
+CONDAPATH="./bin/miniconda3"  # Modify this path if needed
+```
+### Clone MGPipe locally:
+```bash
+git clone https://github.com/ginnymortensen/MGPipe.git
+```
+### Download Kraken2 database:
 Kraken2/Bracken updates its standard reference database. <br>
 To download the most recent database, please reference https://benlangmead.github.io/aws-indexes/k2. <br>
-This command was run to download the most recent database: <br>
-`curl --header 'Host: genome-idx.s3.amazonaws.com' --header 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36' --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' --header 'Accept-Language: en-US,en;q=0.9' --header 'Referer: https://benlangmead.github.io/' 'https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20240605.tar.gz' -L -o 'k2_standard_20240605.tar.gz'` <br>
-To unzip the file, run: <br>
-`tar -xzvf k2_standard_20240605.tar.gz` <br>
-Move this database folder into the `MGPipe` folder. The location of this database is referenceable by `taxonomic_profiler.sh` in the `KRAKEN2_DB` variable.
-
-### 4) Install HUMAnN3:
+```bash
+cd MGPipe
+curl --header 'Host: genome-idx.s3.amazonaws.com' --header 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36' --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' --header 'Accept-Language: en-US,en;q=0.9' --header 'Referer: https://benlangmead.github.io/' 'https://genome-idx.s3.amazonaws.com/kraken/k2_standard_20240605.tar.gz' -L -o 'k2_standard_20240605.tar.gz'
+tar -xzvf k2_standard_20240605.tar.gz
+```
+**Notice:** Update `KRAKEN2_DB` in `taxonomic_profiler.sh` to match your installation path if you already have the Kraken2 database installed:
+```bash
+KRAKEN2_DB="k2_standard_20240605"  # Modify this path if needed
+```
+### Install HUMAnN3:
 HUMAnN is updated every so often. <br>
-Reference https://github.com/biobakery/humann for installation. <br>
-Download the latest tarball via: <br>
-`curl --header 'Host: files.pythonhosted.org' --header 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36' --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' --header 'Accept-Language: en-US,en;q=0.9' --header 'Referer: https://pypi.org/' 'https://files.pythonhosted.org/packages/b2/8f/0d908a2a43f89f03e4d1f22baf80b77a4bce342b721552737173c4da74cd/humann-3.9.tar.gz' -L -o 'humann-3.9.tar.gz'` <br>
-Follow the installation instructions for HUMAnN after download is complete. <br>
-The databases for HUMAnN are installed via `humann_databases --download chocophlan full $INSTALL_LOCATION` as described in the installation instructions for HUMAnN. <br>
-The `$INSTALL LOCATION` should be set to `MGPipe/humann_databases`. The location of this database is referenceable by `functional_profiler.sh` in the `DB_DIR` variable.
+Reference https://github.com/biobakery/humann for installation instructions. <br>
+```bash
+curl --header 'Host: files.pythonhosted.org' --header 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36' --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' --header 'Accept-Language: en-US,en;q=0.9' --header 'Referer: https://pypi.org/' 'https://files.pythonhosted.org/packages/b2/8f/0d908a2a43f89f03e4d1f22baf80b77a4bce342b721552737173c4da74cd/humann-3.9.tar.gz' -L -o 'humann-3.9.tar.gz'
+```
+Follow the installation instructions for HUMAnN after download is complete. The databases for HUMAnN are installed via:<br>
+```bash
+cd MGPipe
+humann_databases --download chocophlan full humann_databases
+humann_databases --download uniref uniref90_diamond humann_databases
+```
+**Notice** Update `DB_DIR` in `functional_profiler.sh` to match your HUMAnN3 database installation path if you already have them installed:
+``` bash
+DB_DIR="humann_databases"  # Modify this path if needed
+```
+
+### **Optional** Install Bowtie2 Indexes:
+MGPipe will automatically install bowtie2 indexes from ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/grch38_1kgmaj.fa.gz if it does not find them in the default directory. This step takes a significant amount of time to run.<br>
+If you already have bowtie2 indexes installed, update `DB_DIR` and `INDEX_NAME` in `host_remover.sh` to match your bowtie2 indexes installation path and index name.
+
+```bash
+DB_PATH="bowtie_indexes"    # Modify this path if needed
+INDEX_NAME="grch38_1kgmaj"  # Modify this index name if needed
+```
 
 ## Usage:
 
-### 1) Directory Structure and Input
-Your directory should be arranged such that paired-end, short read sequences are placed in a directory called `raw` at the same level as the `MGPipe` directory.<br>
-Your sequences should be in `fastq.gz` format and follow conventional nomenclature for paired-end sequences, for example, Illumina reads follow the standard naming convention `samplename_R1_001.fastq.gz`. <br>
-Your directory should have this structure prior to your initial run: <br>
+### Input
+- Create a directory called `raw` at the same directory tree level as `MGPipe`
+```bash
+mkdir raw
+```
+- Ensure sequences are in `fastq.gz` format
+- Place paired-end FASTQs in `raw/` with standard short read naming convention: `*_R1_001.fastq.gz` and `*_R2_001.fastq.gz`
 
+### Directory Structure
+Your directory should have this structure prior to your initial run: <br>
 ```bash
 .
 ├── MGPipe
@@ -62,16 +95,24 @@ Your directory should have this structure prior to your initial run: <br>
 │   ├── taxonomic_profiler.sh
 │   └── trimmer.sh
 └── raw/
+    ├── sample1_R1_001.fastq.gz
+    ├── sample1_R2_001.fastq.gz
+    └── ...
 ```
 <br>
 
-### 2) Running MGPipe
-- Navigate to MGPipe `cd MGPipe` <br>
-- Source the wrapper script `. mgpipe.sh` <br> <br>
-MGPipe will run and log all errors. MGPipe checks to see if bowtie2 indexes are installed, if they are not, MGPipe automatically downloads the GRCh38 human reference genome FASTA and builds these indexes within the MGPipe directory. This step will take a significant amount of time to run. <br><br>
-If you already have bowtie2 indexes available, simply change the path and index name accordingly in the `host_remover.sh` script via the `DB_DIR` and `INDEX_NAME` variables such that it points to your indexes.
-<br><br>
-After your initial run, your directory structure will look like this, where sample-specific directory names will follow fastq.gz filename patterning (e.g. samplename1, samplename2, etc.): <br>
+### Running MGPipe
+
+``` bash
+cd MGPipe
+. mgpipe.sh
+```
+If you'd like to skip taxonomic profiling and/or functional profiling steps:
+```bash
+. mgpipe.sh --skip taxonomic_profiler,functional_profiler
+```
+### Output Structure
+When running natively, your output directory will have this structure:
 
 ``` bash
 .
@@ -83,8 +124,8 @@ After your initial run, your directory structure will look like this, where samp
 │   └── k2_standard_20240605
 ├── raw
 ├── reports
-│   ├── samplename1
-│   └── samplename2
+│   ├── sample1
+│   └── ...
 └── results
     ├── functional_profile
     │   ├── combined_tables
@@ -98,6 +139,60 @@ After your initial run, your directory structure will look like this, where samp
     │   └── sample_tables
     └── trimmed
 ```
-<br>
 
-### 3) Command Options
+## Documentation
+
+### Help Documentation
+``` bash
+. mgpipe.sh --help
+```
+
+### Pipeline Architecture
+| Script | Purpose | Key Tools | Tool Documentation |
+|--------|---------|-----------|--------------------|
+| `trimmer.sh` | Quality control & adapter trimming | [FASTP](https://github.com/OpenGene/fastp) | [FASTP Manual](https://github.com/OpenGene/fastp#readme) |
+| `host_remover.sh` | Host DNA removal | [bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) | [bowtie2 Manual](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml) |
+| `taxonomic_profiler.sh` | Species-level profiling | [Kraken2](https://ccb.jhu.edu/software/kraken2/)<br>[Bracken](https://ccb.jhu.edu/software/bracken/) | [Kraken2 Wiki](https://github.com/DerrickWood/kraken2/wiki)<br>[Bracken Paper](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1871-4) |
+| `functional_profiler.sh` | Metabolic pathway analysis | [HUMAnN3](https://github.com/biobakery/humann) | [HUMAnN3 Docs](https://github.com/biobakery/humann#documentation) |
+
+### Integrated Tools Reference
+#### Quality Control
+- **FASTP**  
+  Official documentation: https://github.com/OpenGene/fastp  
+  Key parameters in MGPipe:
+  ```bash
+  --cut_front --cut_tail --n_base_limit 5 --length_required 75
+  ```
+
+#### Host DNA Removal
+- **bowtie2**  
+  User manual: http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml  
+  Index building command used:
+  ```bash
+  bowtie2-build --threads $THREADS $REF_FASTA $INDEX_NAME
+  ```
+
+#### Taxonomic Profiling
+- **Kraken2**  
+  Configuration guide: https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown  
+  Database requirements:
+  ```bash
+  KRAKEN2_DB="path/to/standard_db"
+  kraken2 --db $KRAKEN2_DB --threads $THREADS --paired $INPUT_FILES
+  ```
+
+- **Bracken**  
+  Abundance estimation methodology:  
+  https://ccb.jhu.edu/software/bracken/
+
+#### Functional Profiling
+- **HUMAnN3**  
+  Full documentation: https://github.com/biobakery/humann#humann-30  
+  Critical database files:
+  ```bash
+  # ChocoPhlAn database
+  humann_databases --download chocophlan full humann_databases
+  
+  # UniRef90 database
+  humann_databases --download uniref uniref90_diamond humann_databases
+  ```

@@ -28,7 +28,6 @@ display_help() {
     echo "  --skip stage1,stage2   Skip specific stages of the pipeline."
     echo "                         Valid stages: taxonomic_profiler, functional_profiler"
     echo "  --help                 Display this help message."
-    exit 0
 }
 
 
@@ -206,6 +205,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --help)
             display_help
+            return 0 2>/dev/null || true
             ;;
         *)
             echo "Error: Invalid argument: '$1'. Use --help for usage information."
