@@ -59,8 +59,8 @@ humann_databases --download uniref uniref90_diamond humann_databases
 DB_DIR="humann_databases"  # Modify this path if needed
 ```
 
-### *Optional* Install Bowtie2 Indexes:
-MGPipe will automatically install bowtie2 indexes from ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/grch38_1kgmaj.fa.gz if it does not find them in the default directory. This step takes a significant amount of time to run.<br><br>
+### *(Optional)* Install Bowtie2 Indexes:
+MGPipe will automatically install bowtie2 indexes from ftp://ftp.ccb.jhu.edu/pub/data/bowtie_indexes/grch38_1kgmaj.fa.gz if it does not find them in the default directory during its initial execution. This step takes a significant amount of time to run.<br><br>
 If you already have bowtie2 indexes installed, update `DB_DIR` and `INDEX_NAME` in `host_remover.sh` to match your bowtie2 indexes installation path and index name.
 
 ```bash
