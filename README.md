@@ -2,6 +2,10 @@
 
 This shotgun metagenomics pipeline processes raw short read paired-end reads into usable microbiome data, suitable for postprocessing. The pipeline performs quality control of sequences, host genome sequence removal, taxonomic profiling, and functional profiling. This pipeline is meant to provide beginners with a seamless tool to achieve basic microbiome analyses.
 
+All downstream scripts used to created the figures in our paper are located in `analysis`.
+
+**Please cite: (DOI_placeholder)**
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
