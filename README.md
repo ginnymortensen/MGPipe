@@ -4,7 +4,7 @@ This shotgun metagenomics pipeline processes raw short read paired-end reads int
 
 All downstream scripts used to created the figures in our paper are located in `analysis`.
 
-**Please cite: (DOI_placeholder)**
+**Please cite: [Metagenomic profiling and predictive modeling of the gut microbiome reveal signatures of gestational disease](https://doi.org/10.1128/spectrum.03155-25)**
 
 ## Table of Contents
 - [Installation](#installation)
